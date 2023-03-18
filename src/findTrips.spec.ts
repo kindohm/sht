@@ -7,6 +7,7 @@ const points: Point[] = [
 ];
 
 const mockSegment: Segment = {
+  id: "10000",
   points: [],
   startsAtTrailhead: false,
   endsAtTrailhead: false,
@@ -94,6 +95,7 @@ describe("findTrips", () => {
     const segments: Segment[] = [
       {
         ...mockSegment,
+        id: "10000",
         startPointId: "1",
         endPointId: "2",
         startsAtTrailhead: true,
@@ -101,6 +103,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10001",
         startPointId: "2",
         endPointId: "3",
         startsAtTrailhead: false,
@@ -122,6 +125,7 @@ describe("findTrips", () => {
     const segments: Segment[] = [
       {
         ...mockSegment,
+        id: "10000",
         startPointId: "1",
         endPointId: "2",
         startsAtTrailhead: true,
@@ -129,6 +133,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10001",
         startPointId: "2",
         endPointId: "3",
         startsAtTrailhead: false,
@@ -136,6 +141,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10002",
         startPointId: "3",
         endPointId: "4",
         startsAtTrailhead: false,
@@ -159,6 +165,7 @@ describe("findTrips", () => {
     const segments: Segment[] = [
       {
         ...mockSegment,
+        id: "10000",
         startPointId: "1",
         endPointId: "2",
         startsAtTrailhead: true,
@@ -166,6 +173,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10001",
         startPointId: "2",
         endPointId: "3",
         startsAtTrailhead: false,
@@ -173,6 +181,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10002",
         startPointId: "3",
         endPointId: "4",
         startsAtTrailhead: false,
@@ -188,6 +197,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10003",
         startPointId: "12",
         endPointId: "13",
         startsAtTrailhead: false,
@@ -195,6 +205,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10004",
         startPointId: "13",
         endPointId: "14",
         startsAtTrailhead: false,
@@ -219,6 +230,7 @@ describe("findTrips", () => {
     const segments: Segment[] = [
       {
         ...mockSegment,
+        id: "10000",
         startPointId: "1",
         endPointId: "2",
         startsAtTrailhead: true,
@@ -226,6 +238,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10001",
         startPointId: "2",
         endPointId: "3",
         startsAtTrailhead: false,
@@ -233,6 +246,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10002",
         startPointId: "3",
         endPointId: "4",
         startsAtTrailhead: false,
@@ -241,6 +255,7 @@ describe("findTrips", () => {
       // 2nd trip, only two segments
       {
         ...mockSegment,
+        id: "10003",
         startPointId: "1",
         endPointId: "3",
         startsAtTrailhead: true,
@@ -265,6 +280,7 @@ describe("findTrips", () => {
     const segments: Segment[] = [
       {
         ...mockSegment,
+        id: "10000",
         startPointId: "1",
         endPointId: "2",
         startsAtTrailhead: true,
@@ -272,6 +288,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10001",
         startPointId: "2",
         endPointId: "3",
         startsAtTrailhead: false,
@@ -280,6 +297,7 @@ describe("findTrips", () => {
       // extra option
       {
         ...mockSegment,
+        id: "10002",
         startPointId: "2",
         endPointId: "4",
         startsAtTrailhead: false,
@@ -287,6 +305,7 @@ describe("findTrips", () => {
       },
       {
         ...mockSegment,
+        id: "10003",
         startPointId: "3",
         endPointId: "4",
         startsAtTrailhead: false,

@@ -27,27 +27,24 @@ const addChildSegments = (
   return { ...segment, possibleNextSegments: followingWithChildren };
 };
 
-const getPartialTripsFromSegmentTree = (
-  segment: SegmentTree
-): SegmentTree[] => {
+const getPartialTripsFromSegmentTree = (segment: SegmentTree): string[][] => {
+  let inner: string[][] = [];
+
   if (
     !segment.possibleNextSegments ||
     segment.possibleNextSegments.length === 0
   ) {
-    return [segment];
+    return [[segment.id]];
   }
 
-  const r = segment.possibleNextSegments?.reduce(
-    (partials: SegmentTree[], nextSegment: SegmentTree) => {
-      const morePartials = getPartialTripsFromSegmentTree(nextSegment);
-      const ret = partials.concat([segment, ...morePartials]);
+  segment.possibleNextSegments?.forEach((nextSeg) => {
+    const childs = getPartialTripsFromSegmentTree(nextSeg);
+    childs.forEach((c) => {
+      inner.push([segment.id, ...c]);
+    });
+  });
 
-      return ret;
-    },
-    []
-  );
-
-  return r;
+  return inner;
 };
 
 export const findTrips = ({
@@ -73,11 +70,28 @@ export const findTrips = ({
     getPartialTripsFromSegmentTree(s)
   );
 
-  const result = possibles.map((p) => ({ segments: p }));
+  let finalSegmentIds: string[][] = [];
 
-  const tripsThatEndAtTrailhead = result.filter((trip) => {
-    return trip.segments[trip.segments.length - 1].endsAtTrailhead;
+  possibles.forEach((p) => {
+    p.forEach((pp) => {
+      finalSegmentIds.push(pp);
+    });
   });
 
-  return tripsThatEndAtTrailhead;
+  const final = finalSegmentIds.map((trip) => {
+    let segs: Segment[] = [];
+
+    trip.forEach((segmentId) => {
+      const found = segments.find((s) => s.id === segmentId);
+      if (found) {
+        segs.push(found);
+      }
+    });
+
+    return { segments: segs };
+  });
+
+  return final.filter((trip) => {
+    return trip.segments[trip.segments.length - 1].endsAtTrailhead;
+  });
 };

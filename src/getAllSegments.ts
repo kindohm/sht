@@ -1,6 +1,7 @@
 import { Point } from "./points";
 
 export type Segment = {
+  id: string;
   points: Point[];
   startsAtTrailhead: boolean;
   endsAtTrailhead: boolean;
@@ -23,6 +24,8 @@ export const getAllSegments = ({
   const segments: Segment[] = [];
   const minDaily = minDailyDistance ?? 1;
 
+  let segmentId = 10000;
+
   return points.reduce((segments: Segment[], point: Point) => {
     const { mile, id } = point;
 
@@ -37,7 +40,9 @@ export const getAllSegments = ({
         const pointsBetween = pointsWithinDistance.filter(
           (b) => b.mile > point.mile && b.mile < p.mile
         );
+        segmentId++;
         return {
+          id: segmentId.toString(),
           points: [point, ...pointsBetween, p],
           startsAtTrailhead: point.type === "trailhead",
           endsAtTrailhead: p.type === "trailhead",

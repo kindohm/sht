@@ -87,6 +87,15 @@ export const findTrips = ({
     .filter((trip) => {
       return trip.segments[trip.segments.length - 1].endsAtTrailhead;
     })
+    .filter((trip) => {
+      const trailHeadInMiddle = trip.segments.filter(
+        (seg, i) =>
+          i > 0 &&
+          i < trip.segments.length - 1 &&
+          (seg.endsAtTrailhead || seg.startsAtTrailhead)
+      );
+      return trailHeadInMiddle.length === 0;
+    })
     .filter((trip) => trip.segments.length === numberOfDays);
 
   return trips.map((trip) => {

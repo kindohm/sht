@@ -10,5 +10,10 @@
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
+  },
+  "scripts": {
+    "build": "yarn tsc",
+    "dev": "yarn nodemon",
+    "start": "yarn tsc && node ./.build/index.js"
   }
 }

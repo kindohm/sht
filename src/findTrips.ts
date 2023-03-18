@@ -2,6 +2,8 @@ import { Segment } from "./getAllSegments";
 
 type Trip = {
   segments: Segment[];
+  description: string;
+  totalDistance: number;
 };
 
 type SegmentTree = Segment & {
@@ -27,20 +29,20 @@ const addChildSegments = (
   return { ...segment, possibleNextSegments: followingWithChildren };
 };
 
-const getPartialTripsFromSegmentTree = (segment: SegmentTree): string[][] => {
-  let inner: string[][] = [];
+const getPartialTripsFromSegmentTree = (segment: SegmentTree): Segment[][] => {
+  let inner: Segment[][] = [];
 
   if (
     !segment.possibleNextSegments ||
     segment.possibleNextSegments.length === 0
   ) {
-    return [[segment.id]];
+    return [[segment]];
   }
 
   segment.possibleNextSegments?.forEach((nextSeg) => {
     const childs = getPartialTripsFromSegmentTree(nextSeg);
     childs.forEach((c) => {
-      inner.push([segment.id, ...c]);
+      inner.push([segment, ...c]);
     });
   });
 
@@ -70,7 +72,7 @@ export const findTrips = ({
     getPartialTripsFromSegmentTree(s)
   );
 
-  let finalSegmentIds: string[][] = [];
+  let finalSegmentIds: Segment[][] = [];
 
   possibles.forEach((p) => {
     p.forEach((pp) => {
@@ -78,20 +80,24 @@ export const findTrips = ({
     });
   });
 
-  const final = finalSegmentIds.map((trip) => {
-    let segs: Segment[] = [];
+  const trips = finalSegmentIds
+    .map((trip) => {
+      return { segments: trip };
+    })
+    .filter((trip) => {
+      return trip.segments[trip.segments.length - 1].endsAtTrailhead;
+    })
+    .filter((trip) => trip.segments.length === numberOfDays);
 
-    trip.forEach((segmentId) => {
-      const found = segments.find((s) => s.id === segmentId);
-      if (found) {
-        segs.push(found);
-      }
-    });
-
-    return { segments: segs };
-  });
-
-  return final.filter((trip) => {
-    return trip.segments[trip.segments.length - 1].endsAtTrailhead;
+  return trips.map((trip) => {
+    const totalDistance = trip.segments.reduce(
+      (sum, seg) => sum + seg.distance,
+      0
+    );
+    const description =
+      trip.segments[0].points[0].name +
+      " to " +
+      trip.segments[trip.segments.length - 1].points[1].name;
+    return { ...trip, totalDistance, description };
   });
 };

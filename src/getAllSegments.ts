@@ -2,6 +2,13 @@ import { Point } from "./points";
 
 export type Segment = {
   points: Point[];
+  startsAtTrailhead: boolean;
+  endsAtTrailhead: boolean;
+  name: string;
+  reverseName: string;
+  distance: number;
+  startPointId: string;
+  endPointId: string;
 };
 
 export const getAllSegments = ({
@@ -30,7 +37,16 @@ export const getAllSegments = ({
         const pointsBetween = pointsWithinDistance.filter(
           (b) => b.mile > point.mile && b.mile < p.mile
         );
-        return { points: [point, ...pointsBetween, p] };
+        return {
+          points: [point, ...pointsBetween, p],
+          startsAtTrailhead: point.type === "trailhead",
+          endsAtTrailhead: p.type === "trailhead",
+          name: `${point.name} to ${p.name}`,
+          reverseName: `${p.name} to ${point.name}`,
+          distance: p.mile - point.mile,
+          startPointId: point.id,
+          endPointId: p.id,
+        };
       }
     );
 

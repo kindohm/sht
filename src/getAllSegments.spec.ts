@@ -160,7 +160,9 @@ describe("getAllSegments", () => {
 
     expect(segment1.points.length).toEqual(2);
     expect(segment1.points[0].id).toEqual("point1");
+    expect(segment1.startPointId).toEqual("point1");
     expect(segment1.points[1].id).toEqual("point2");
+    expect(segment1.endPointId).toEqual("point2");
 
     expect(segment2.points.length).toEqual(3);
     expect(segment2.points[0].id).toEqual("point1");

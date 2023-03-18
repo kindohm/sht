@@ -27,7 +27,28 @@ const addChildSegments = (
   return { ...segment, possibleNextSegments: followingWithChildren };
 };
 
-const getTripsFromTrees = (segments: SegmentTree[]): Trip[] => {};
+const getPartialTripsFromSegmentTree = (
+  segment: SegmentTree
+): SegmentTree[] => {
+  if (
+    !segment.possibleNextSegments ||
+    segment.possibleNextSegments.length === 0
+  ) {
+    return [segment];
+  }
+
+  const r = segment.possibleNextSegments?.reduce(
+    (partials: SegmentTree[], nextSegment: SegmentTree) => {
+      const morePartials = getPartialTripsFromSegmentTree(nextSegment);
+      const ret = partials.concat([segment, ...morePartials]);
+
+      return ret;
+    },
+    []
+  );
+
+  return r;
+};
 
 export const findTrips = ({
   segments,
@@ -40,10 +61,6 @@ export const findTrips = ({
     return [];
   }
 
-  const additionalDays: number[] = new Array(numberOfDays - 1)
-    .fill(null)
-    .map((x, i) => i);
-
   const segmentsStartingAtTrailheads = segments.filter(
     (s) => s.startsAtTrailhead
   );
@@ -52,11 +69,15 @@ export const findTrips = ({
     addChildSegments(s, segments, numberOfDays, 1)
   );
 
-  return getTripsFromTrees(segmentsWithChildren);
+  const possibles = segmentsWithChildren.map((s) =>
+    getPartialTripsFromSegmentTree(s)
+  );
 
-  // const tripsThatEndAtTrailhead = possibleTrips.filter((trip) => {
-  //   return trip.segments[trip.segments.length - 1].endsAtTrailhead;
-  // });
+  const result = possibles.map((p) => ({ segments: p }));
 
-  // return tripsThatEndAtTrailhead;
+  const tripsThatEndAtTrailhead = result.filter((trip) => {
+    return trip.segments[trip.segments.length - 1].endsAtTrailhead;
+  });
+
+  return tripsThatEndAtTrailhead;
 };

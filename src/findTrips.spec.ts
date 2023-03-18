@@ -89,4 +89,221 @@ describe("findTrips", () => {
 
     expect(trips.length).toEqual(1);
   });
+
+  it("should return one trip with two segments", () => {
+    const segments: Segment[] = [
+      {
+        ...mockSegment,
+        startPointId: "1",
+        endPointId: "2",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "2",
+        endPointId: "3",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+    ];
+
+    const numberOfDays = 2;
+
+    const trips = findTrips({
+      segments,
+      numberOfDays,
+    });
+
+    expect(trips.length).toEqual(1);
+  });
+
+  it("should return one trip with three segments", () => {
+    const segments: Segment[] = [
+      {
+        ...mockSegment,
+        startPointId: "1",
+        endPointId: "2",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "2",
+        endPointId: "3",
+        startsAtTrailhead: false,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "3",
+        endPointId: "4",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+    ];
+
+    const numberOfDays = 3;
+
+    const trips = findTrips({
+      segments,
+      numberOfDays,
+    });
+
+    expect(trips.length).toEqual(1);
+    const [trip] = trips;
+    expect(trip.segments.length).toEqual(3);
+  });
+
+  it("should return two trips with three segments", () => {
+    const segments: Segment[] = [
+      {
+        ...mockSegment,
+        startPointId: "1",
+        endPointId: "2",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "2",
+        endPointId: "3",
+        startsAtTrailhead: false,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "3",
+        endPointId: "4",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+
+      {
+        ...mockSegment,
+        startPointId: "11",
+        endPointId: "12",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "12",
+        endPointId: "13",
+        startsAtTrailhead: false,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "13",
+        endPointId: "14",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+    ];
+
+    const numberOfDays = 3;
+
+    const trips = findTrips({
+      segments,
+      numberOfDays,
+    });
+
+    expect(trips.length).toEqual(2);
+    const [trip1, trip2] = trips;
+    expect(trip1.segments.length).toEqual(3);
+    expect(trip2.segments.length).toEqual(3);
+  });
+
+  it("should return two trips for multiple options from same start segment", () => {
+    const segments: Segment[] = [
+      {
+        ...mockSegment,
+        startPointId: "1",
+        endPointId: "2",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "2",
+        endPointId: "3",
+        startsAtTrailhead: false,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "3",
+        endPointId: "4",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+      // 2nd trip, only two segments
+      {
+        ...mockSegment,
+        startPointId: "1",
+        endPointId: "3",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+    ];
+
+    const numberOfDays = 3;
+
+    const trips = findTrips({
+      segments,
+      numberOfDays,
+    });
+
+    expect(trips.length).toEqual(2);
+    const [trip1, trip2] = trips;
+    expect(trip1.segments.length).toEqual(3);
+    expect(trip2.segments.length).toEqual(2);
+  });
+
+  it("should return two trips for multiple options in the middle", () => {
+    const segments: Segment[] = [
+      {
+        ...mockSegment,
+        startPointId: "1",
+        endPointId: "2",
+        startsAtTrailhead: true,
+        endsAtTrailhead: false,
+      },
+      {
+        ...mockSegment,
+        startPointId: "2",
+        endPointId: "3",
+        startsAtTrailhead: false,
+        endsAtTrailhead: false,
+      },
+      // extra option
+      {
+        ...mockSegment,
+        startPointId: "2",
+        endPointId: "4",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+      {
+        ...mockSegment,
+        startPointId: "3",
+        endPointId: "4",
+        startsAtTrailhead: false,
+        endsAtTrailhead: true,
+      },
+    ];
+
+    const numberOfDays = 5;
+
+    const trips = findTrips({
+      segments,
+      numberOfDays,
+    });
+
+    expect(trips.length).toEqual(2);
+    const [trip1, trip2] = trips;
+    expect(trip1.segments.length).toEqual(3);
+    expect(trip2.segments.length).toEqual(2);
+  });
 });
